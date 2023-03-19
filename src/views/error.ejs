@@ -1,3 +1,13 @@
-<h1><%= message %></h1>
-<h2><%= error.status %></h2>
-<pre><%= error.stack %></pre>
+<%- include('layout/header', { title: 'Microblog - error page', isNav: true })%>
+
+<div class="container margin-top-20">
+    <div class="row">
+        <!-- 左侧 -->
+        <div class="col-8">
+            <h4 class="margin-bottom-20 padding-bottom-10 border-bottom">Oops</h4>
+            <p>Sorry, something wrong happend, please <a href="/">return to the home page</a></p>
+        </div>
+    </div>
+</div>
+
+<%- include('layout/footer')%>

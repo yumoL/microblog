@@ -12,7 +12,8 @@ const { REDIS_CONF } = require('./config/db')
 const { isProd } = require('./utils/env')
  
 const index = require('./routes/index')
-const users = require('./routes/users')
+const userViewRouter = require('./routes/views/user')
+const userApiRouter = require('./routes/apis/user')
 const errorViewRouter = require('./routes/views/error')
 
 // error handler
@@ -41,7 +42,7 @@ app.use(views(__dirname + '/views', {
 app.keys = ['loPX_?#']
 app.use(session({
   key: 'weibo.sid', //cookie key in the http header
-  prefix: 'weibo:sess:', //prefix of the redis key, e.g., weibo:sess:ZkrNvEYY9bmUg0LHj00pyN_1XZsxN6LX
+  prefix: 'weibo:sess:', //prefix of the redis key, e.g., weibo:sess:(cookie key e.g., ZkrNvEYY9bmUg0LHj00pyN_1XZsxN6LX)
   cookie: {
     path: '/', //cookie can be used in all APIs of the server
     httpOnly: true, //cookie can only be changed in the server
@@ -62,8 +63,9 @@ app.use(session({
 // })
 
 // routes
-app.use(index.routes(), index.allowedMethods())
-app.use(users.routes(), users.allowedMethods())
+app.use(index.routes(), index.allowedMethods()) //use of allowedMethods https://juejin.cn/post/7042183318854434852
+app.use(userViewRouter.routes(), userViewRouter.allowedMethods())
+app.use(userApiRouter.routes(), userApiRouter.allowedMethods())
 app.use(errorViewRouter.routes(), errorViewRouter.allowedMethods()) //error routes need to be the final one
 
 // error-handling

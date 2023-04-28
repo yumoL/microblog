@@ -1,0 +1,50 @@
+<%- include('layout/header', { title: 'Microblog - Login' , isNarrow: true })%>
+
+  <h1>Login</h1>
+  <% if (locals.isLogin) { %>
+    <p>
+      <%= locals.userName%> You have logged in, please visit<a href="/">your home page</a>
+    </p>
+    <% } else { %>
+      <form>
+        <div class="form-group">
+          <input type="text" class="form-control" id="input-username" placeholder="Username">
+        </div>
+        <div class="form-group">
+          <input type="password" class="form-control" id="input-password" placeholder="Password">
+        </div>
+        <button type="submit" class="btn btn-primary" id="btn-submit">Login</button>
+        &nbsp;
+        <a href="/register">Sign up>></a>
+      </form>
+
+      <script>
+        $(function () {
+          var $inputUserName = $('#input-username')
+          var $inputPassword = $('#input-password')
+          $('#btn-submit').click(function (e) {
+
+            e.preventDefault()
+            const userName = $inputUserName.val()
+            const password = $inputPassword.val()
+
+            // submit
+            ajax.post('/api/user/login', {
+              userName,
+              password
+            }, function (err, data) {
+              if (err) {
+                alert(err)
+                return
+              }
+              // redirect to the pointed url or the home page
+              //e.g., http://localhost:3000/login?url=xxx
+              var redirectUrl = $.query.get('url') || '/'
+              location.href = redirectUrl
+            })
+          })
+        })
+      </script>
+      <% } %>
+
+        <%- include('layout/footer')%>

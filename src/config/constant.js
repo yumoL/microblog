@@ -3,5 +3,5 @@
  */
 
 module.exports = {
-  DEFAULT_PICTURE: 'https://thumbs.dreamstime.com/b/default-avatar-profile-vector-user-profile-default-avatar-profile-vector-user-profile-profile-179376714.jpg'
+  DEFAULT_PICTURE: 'https://static.vecteezy.com/system/resources/previews/009/734/564/original/default-avatar-profile-icon-of-social-media-user-vector.jpg'
 }

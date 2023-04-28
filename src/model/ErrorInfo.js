@@ -43,7 +43,7 @@ module.exports = {
     message: 'Failed to change user info'
   },
 
-  jsonSchemaFileInfo: {
+  jsonSchemaFailInfo: {
     errno: 10009,
     message: 'Validation failed'
   },

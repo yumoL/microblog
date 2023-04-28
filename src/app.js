@@ -9,6 +9,7 @@ const session = require('koa-generic-session')
 const redisStore = require('koa-redis')
 
 const { REDIS_CONF } = require('./config/db')
+const { SESSION_SECRET_KEY } = require('./config/secretKeys')
 const { isProd } = require('./utils/env')
  
 const index = require('./routes/index')
@@ -39,7 +40,7 @@ app.use(views(__dirname + '/views', {
 }))
 
 // session config
-app.keys = ['loPX_?#']
+app.keys = [SESSION_SECRET_KEY]
 app.use(session({
   key: 'weibo.sid', //cookie key in the http header
   prefix: 'weibo:sess:', //prefix of the redis key, e.g., weibo:sess:(cookie key e.g., ZkrNvEYY9bmUg0LHj00pyN_1XZsxN6LX)

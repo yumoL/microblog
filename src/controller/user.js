@@ -2,9 +2,13 @@
  * @description user controller (business logic)
  */
 
-const { getUserInfo } = require('../services/user')
+const { getUserInfo, createUser } = require('../services/user')
 const { SuccessModel, ErrorModel } = require('../model/ResModel')
-const { regisrerUserNameNotExistInfo } = require('../model/ErrorInfo')
+const { registerUserNameNotExistInfo,
+  registerUserNameExistInfo,
+  registerFailInfo }
+  = require('../model/ErrorInfo')
+const doCrypto = require('../utils/encrypt')
 
 /**
  * check if th username is already existing
@@ -18,12 +22,39 @@ async function isExist(userName) {
 
   } else {
     // {errno: xxx, message: xxx}
-    return new ErrorModel(regisrerUserNameNotExistInfo)
+    return new ErrorModel(registerUserNameNotExistInfo)
 
+  }
+}
+
+/**
+ * register a new user
+ * @param {string} userName 
+ * @param {string} password
+ * @param {number} gender (1=man, 2=woman, 3=other)
+ */
+async function register({ userName, password, gender }) {
+  const userInfo = await getUserInfo(userName)
+  if (userInfo) {
+    // username already exists
+    return ErrorModel(registerUserNameExistInfo)
+  }
+
+  try {
+    await createUser({ 
+      userName, 
+      password: doCrypto(password), 
+      gender 
+    })
+    return new SuccessModel()
+  } catch (ex) {
+    console.error(ex.message, ex.stack)
+    return new ErrorModel(registerFailInfo)
   }
 
 }
 
 module.exports = {
-  isExist
+  isExist,
+  register
 }

@@ -39,6 +39,7 @@ async function get(key) {
     if (val === null) return val
     try {
       val = JSON.parse(val)
+      return val
     } catch (err) { }
     return val
   } catch (err) {

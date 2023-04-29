@@ -6,7 +6,8 @@ const { getUserInfo, createUser } = require('../services/user')
 const { SuccessModel, ErrorModel } = require('../model/ResModel')
 const { registerUserNameNotExistInfo,
   registerUserNameExistInfo,
-  registerFailInfo }
+  registerFailInfo,
+  loginFailInfo }
   = require('../model/ErrorInfo')
 const doCrypto = require('../utils/encrypt')
 
@@ -54,7 +55,26 @@ async function register({ userName, password, gender }) {
 
 }
 
+/**
+ * Log in a user
+ * @param {*} ctx koa2 ctx
+ * @param {*} userName 
+ * @param {*} password 
+ */
+async function login(ctx, userName, password) {
+  const userInfo = await getUserInfo(userName, doCrypto(password))
+  if (!userInfo) {
+    return new ErrorModel(loginFailInfo)
+  }
+
+  if (ctx.session.userInfo == null) {
+    ctx.session.userInfo = userInfo
+  }
+  return new SuccessModel()
+}
+
 module.exports = {
   isExist,
-  register
+  register,
+  login
 }

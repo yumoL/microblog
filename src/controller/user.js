@@ -2,12 +2,14 @@
  * @description user controller (business logic)
  */
 
-const { getUserInfo, createUser } = require('../services/user')
+const { getUserInfo, createUser, deleteUser } = require('../services/user')
 const { SuccessModel, ErrorModel } = require('../model/ResModel')
 const { registerUserNameNotExistInfo,
   registerUserNameExistInfo,
   registerFailInfo,
-  loginFailInfo }
+  loginFailInfo,
+  deleteUserFailInfo
+}
   = require('../model/ErrorInfo')
 const doCrypto = require('../utils/encrypt')
 
@@ -38,14 +40,14 @@ async function register({ userName, password, gender }) {
   const userInfo = await getUserInfo(userName)
   if (userInfo) {
     // username already exists
-    return ErrorModel(registerUserNameExistInfo)
+    return new ErrorModel(registerUserNameExistInfo)
   }
 
   try {
-    await createUser({ 
-      userName, 
-      password: doCrypto(password), 
-      gender 
+    await createUser({
+      userName,
+      password: doCrypto(password),
+      gender
     })
     return new SuccessModel()
   } catch (ex) {
@@ -73,8 +75,21 @@ async function login(ctx, userName, password) {
   return new SuccessModel()
 }
 
+/**
+ * delete the current user who logs in, i.e., who has a session
+ * @param {string} userName 
+ */
+async function deleteCurUser(userName) {
+  const res = await deleteUser(userName)
+  if (res) {
+    return new SuccessModel()
+  }
+  return new ErrorModel(deleteUserFailInfo)
+}
+
 module.exports = {
   isExist,
   register,
-  login
+  login,
+  deleteCurUser
 }

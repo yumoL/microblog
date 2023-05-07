@@ -60,6 +60,31 @@ test('can log in', async () => {
   COOKIE = res.headers['set-cookie'].join(";")
 })
 
+// change info
+test('can change user info', async() => {
+  const res = await server
+    .patch('/api/user/changeInfo')
+    .send({
+      nickName: "test_nickname",
+      city: 'test_city',
+      picture: 'test.png'
+    })
+    .set('cookie', COOKIE)
+  expect(res.body.errno).toBe(0)
+})
+
+//change password
+test('can change password', async() => {
+  const res = await server
+    .patch('/api/user/changePassword')
+    .send({
+      password,
+      newPassword: `p_${Date.now()}`
+    })
+    .set('cookie', COOKIE)
+  expect(res.body.errno).toBe(0)
+})
+
 // delete user
 test('can delete a user', async () => {
   const res = await server
@@ -74,4 +99,12 @@ test('username should not exist after being deleted', async () => {
     .post('/api/user/isExist')
     .send({ userName })
   expect(res.body.errno).not.toBe(0)
+})
+
+//logout
+test('can log out', async() => {
+  const res = await server
+    .post('/api/user/logout')
+    .set('cookie', COOKIE)
+  expect(res.body.errno).toBe(0)
 })

@@ -2,13 +2,15 @@
  * @description user controller (business logic)
  */
 
-const { getUserInfo, createUser, deleteUser } = require('../services/user')
+const { getUserInfo, createUser, deleteUser, updateUser } = require('../services/user')
 const { SuccessModel, ErrorModel } = require('../model/ResModel')
 const { registerUserNameNotExistInfo,
   registerUserNameExistInfo,
   registerFailInfo,
   loginFailInfo,
-  deleteUserFailInfo
+  deleteUserFailInfo,
+  changeInfoFailInfo,
+  changePasswordFailInfo
 }
   = require('../model/ErrorInfo')
 const doCrypto = require('../utils/encrypt')
@@ -87,9 +89,62 @@ async function deleteCurUser(userName) {
   return new ErrorModel(deleteUserFailInfo)
 }
 
+/**
+ * 
+ * @param {Object} ctx 
+ * @param {string} nickName
+ * @param {string} city
+ * @param {string} picture avatar url
+ */
+async function changeInfo(ctx, { nickName, city, picture }) {
+  const { userName } = ctx.session.userInfo
+  if (!nickName) {
+    nickName = userName
+  }
+  const result = await updateUser(
+    {
+      newNickName: nickName,
+      newCity: city,
+      newPicture: picture
+    },
+    { userName }
+  )
+  if (result) {
+    Object.assign(ctx.session.userInfo, {
+      nickName,
+      city,
+      picture
+    })
+    return new SuccessModel()
+  }
+  return new ErrorModel(changeInfoFailInfo)
+}
+
+/**
+ * change password
+ * @param {string} userName 
+ * @param {string} password 
+ * @param {string} newPassword 
+ */
+async function changePassword(userName, password, newPassword) {
+  const result = updateUser(
+    { newPassword: doCrypto(newPassword) },
+    {
+      userName,
+      password: doCrypto(password)
+    }
+  )
+  if (result) {
+    return new SuccessModel()
+  }
+  return new ErrorModel(changePasswordFailInfo)
+}
+
 module.exports = {
   isExist,
   register,
   login,
-  deleteCurUser
+  deleteCurUser,
+  changeInfo,
+  changePassword
 }

@@ -37,7 +37,7 @@ async function getUserInfo(userName, password) {
  * @param {number} gender (1=man, 2=woman, 3=other)
  * @param {string} nickName
  */
-async function createUser({ userName, password, gender=3, nickName }) {
+async function createUser({ userName, password, gender = 3, nickName }) {
   const result = User.create({
     userName,
     password,
@@ -61,8 +61,45 @@ async function deleteUser(userName) {
   return result > 0
 }
 
+/**
+ * update user info
+ * @param {Object} param0 new user info  {newPassword, newNickName, newPicture, newCity}
+ * @param {Object} param1 query condition {userName, password}
+ */
+async function updateUser(
+  { newPassword, newNickName, newPicture, newCity },
+  { userName, password }
+) {
+  const updateData = {}
+  if (newPassword) {
+    updateData.password = newPassword
+  }
+  if (newNickName) {
+    updateData.nickName = newNickName
+  }
+  if (newPicture) {
+    updateData.picture = newPicture
+  }
+  if (newCity) {
+    updateData.city = newCity
+  }
+
+  const whereData = {
+    userName
+  }
+  if (password) {
+    whereData.password = password
+  }
+  const result = await User.update(
+    updateData,
+    { where: whereData }
+  )
+  return result[0] > 0
+}
+
 module.exports = {
   getUserInfo,
   createUser,
-  deleteUser
+  deleteUser,
+  updateUser
 }

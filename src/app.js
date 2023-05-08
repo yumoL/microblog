@@ -14,10 +14,10 @@ const { REDIS_CONF } = require('./config/db')
 const { SESSION_SECRET_KEY } = require('./config/secretKeys')
 const { isProd } = require('./utils/env')
  
-const index = require('./routes/index')
 const utilsApiRouter = require('./routes/apis/utils')
 const userViewRouter = require('./routes/views/user')
 const userApiRouter = require('./routes/apis/user')
+const blogViewRouter = require('./routes/views/blog')
 const errorViewRouter = require('./routes/views/error')
 
 // error handler
@@ -68,10 +68,11 @@ app.use(session({
 // })
 
 // routes
-app.use(index.routes(), index.allowedMethods()) //use of allowedMethods https://juejin.cn/post/7042183318854434852
+//use of allowedMethods https://juejin.cn/post/7042183318854434852
 app.use(utilsApiRouter.routes(), utilsApiRouter.allowedMethods())
 app.use(userViewRouter.routes(), userViewRouter.allowedMethods())
 app.use(userApiRouter.routes(), userApiRouter.allowedMethods())
+app.use(blogViewRouter.routes(), blogViewRouter.allowedMethods())
 app.use(errorViewRouter.routes(), errorViewRouter.allowedMethods()) //error routes need to be the final one
 
 // error-handling

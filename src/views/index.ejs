@@ -1,19 +1,19 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <hr>
-    <p>EJS Welcome to <%= title %></p>
-    <%- include('widgets/user-info.ejs', {
-      isMe
-    }) %>
-    <hr>
-    <%- include('widgets/bloglist.ejs', {
-      blogList
-    })%>
-  </body>
-</html>
+<%- include('layout/header', { title: 'Weibo - Home page' , isNav: true, list: true, isInputBlog: true })%>
+
+  <div class="container margin-top-20">
+    <div class="row">
+      <!-- left -->
+      <div class="col-8">
+        <!-- blog input area -->
+        <%- include('widgets/input')%>
+
+      </div> 
+
+      <!-- right -->
+      <div class="col-4">
+        todo: right side
+      </div> 
+    </div>
+  </div>
+
+  <%- include('layout/footer')%>

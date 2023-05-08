@@ -18,6 +18,7 @@ const utilsApiRouter = require('./routes/apis/utils')
 const userViewRouter = require('./routes/views/user')
 const userApiRouter = require('./routes/apis/user')
 const blogViewRouter = require('./routes/views/blog')
+const homeApiRouter = require('./routes/apis/blog-home')
 const errorViewRouter = require('./routes/views/error')
 
 // error handler
@@ -73,6 +74,7 @@ app.use(utilsApiRouter.routes(), utilsApiRouter.allowedMethods())
 app.use(userViewRouter.routes(), userViewRouter.allowedMethods())
 app.use(userApiRouter.routes(), userApiRouter.allowedMethods())
 app.use(blogViewRouter.routes(), blogViewRouter.allowedMethods())
+app.use(homeApiRouter.routes(), homeApiRouter.allowedMethods())
 app.use(errorViewRouter.routes(), errorViewRouter.allowedMethods()) //error routes need to be the final one
 
 // error-handling

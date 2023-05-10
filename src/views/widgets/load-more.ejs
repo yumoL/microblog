@@ -1,0 +1,40 @@
+<div class="margin-bottom-20 ">
+  <button id="btn-load-more" type="button" class="btn btn-sm btn-lg btn-block">Click to load more</button>
+</div>
+
+<script>
+  var PAGE_SIZE = <%= pageSize%>
+  var PAGE_INDEX =  <%= pageIndex%>
+  var COUNT =  <%= count%>
+  var $btnLoadMore = $('#btn-load-more')
+  var $containerWeiboList = $('<%= containerSelector%>')
+  var api = '<%= api%>'
+
+  // load more
+  $btnLoadMore.click(function () {
+    var nextPageIndex = PAGE_INDEX + 1
+    ajax.get(api + '/' + nextPageIndex, function (err, data) {
+      if (err) {
+        alert(err)
+        return
+      }
+      // update pageIndex
+      PAGE_INDEX = data.pageIndex
+
+      // check if "load more" needs to hidden
+      if ((PAGE_INDEX + 1) * PAGE_SIZE >= COUNT) {
+        $btnLoadMore.hide()
+      }
+
+      // append new blogs to the blog list
+      var $tempContainer = $(data.blogListTpl)
+      $tempContainer.each(function (index, item) {
+        if (item.nodeType !== 1) {
+          // not a DOM element
+          return
+        }
+        $containerWeiboList.append($(item))
+      })
+    })
+  })
+</script>

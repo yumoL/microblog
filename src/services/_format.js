@@ -3,6 +3,7 @@
  */
 
 const { DEFAULT_PICTURE } = require('../config/constant')
+const { timeFormat } = require('../utils/dt')
 
 /**
  * format user avatar
@@ -29,6 +30,30 @@ function formatUser(list) {
   return _formatUserPicture(list)
 }
 
+/**
+ * format database timestamp
+ * @param {Object} obj an object obtained from DB
+ */
+function _formatDBTime(obj) {
+  obj.createdAtFormat = timeFormat(obj.createdAt)
+  obj.updatedAtFormat = timeFormat(obj.updatedAt)
+  return obj
+}
+
+/**
+ * format blog info
+ * @param {Array|Object} list blog list or a single blog object
+ */
+function formatBlog(list) {
+  if (list == null) return 
+  if (list instanceof Array) {
+    return list.map(_formatDBTime)
+  }
+
+  return _formatDBTime(list)
+}
+
 module.exports = {
-  formatUser
+  formatUser,
+  formatBlog
 }

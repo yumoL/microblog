@@ -1,0 +1,74 @@
+<div class="user-info clear-fix">
+  <img src="<%= userInfo.picture%>" class="header-img float-left" />
+  <h4 class="user-name">
+    <%= userInfo.nickName%>
+  </h4>
+</div>
+
+<% if (isMe) { %>
+  <%# this is my profile%>
+    <p class="bold margin-top-10">
+      <a href="/at-me">
+        @me (<%= locals.atCount%>)
+      </a>
+    </p>
+    <% } else { %>
+      <%# this is another user's profile%>
+        <p class="margin-top-10">
+          <button>Follow/Unfollow</button>
+          <!-- <button id="btn-un-follow" class="btn btn-light" style="display: none;">取消关注</button>
+      <button id="btn-follow" class="btn btn-primary" style="display: none;">关注</button> -->
+        </p>
+        <% } %>
+
+          <script>
+            $(function () {
+              // current userId
+              var curUserId = <%= userInfo.id%> ;
+
+              // show or hide the follow/unfollow button
+              var $btnFollow = $('#btn-follow')
+              var $btnUnFollow = $('#btn-un-follow')
+              if (<%= !isMe %>) {
+              //already follow the user
+              if (<%= locals.amIFollowed %>) {
+                $btnUnFollow.show()
+              } else {
+                $btnFollow.show()
+              }
+            }
+
+            // follow the user
+            $btnFollow.click(function () {
+              ajax.post('/api/profile/follow', {
+                userId: curUserId
+              }, function (err) {
+                if (err) {
+                  alert(err)
+                  return
+                }
+                
+                $btnFollow.hide()
+                $btnUnFollow.show()
+              })
+            })
+
+            // unfollow the user
+            $btnUnFollow.click(function () {
+              if (confirm('Do you want to unfollow this user?') === false) {
+                return
+              }
+              ajax.post('/api/profile/unFollow', {
+                userId: curUserId
+              }, function (err) {
+                if (err) {
+                  alert(err)
+                  return
+                }
+                
+                $btnFollow.show()
+                $btnUnFollow.hide()
+              })
+            })
+})
+          </script>

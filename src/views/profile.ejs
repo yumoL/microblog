@@ -1,0 +1,40 @@
+<%- include('layout/header', { title: 'Weibo - Zone', isNav: true, list: true })%>
+
+  <div class="container margin-top-20">
+    <div class="row">
+      <!-- left -->
+      <div class="col-8">
+        <h4 class="margin-bottom-20 padding-bottom-10 border-bottom">Personal Zone</h4>
+
+        <% if (blogData.isEmpty) { %>
+          <div>
+            <center>No blog yet</center>
+          </div>
+          <% } else { %>
+            <!-- first page of the blog list -->
+            <div id="container-weibo-list" class="weibo-list">
+              <%- include('widgets/blog-list', { blogList: blogData.blogList })%>
+            </div> 
+            <!-- load more -->
+            <% if (blogData.count > blogData.blogList.length) { %>
+              <%- include('widgets/load-more', { pageSize: blogData.pageSize, pageIndex: blogData.pageIndex, count:
+                blogData.count, containerSelector: '#container-weibo-list', api: '/api/profile/loadMore/' +
+                userData.userInfo.userName})%>
+                <% } %> 
+                  <% } %>
+      </div> 
+
+      <!-- right -->
+      <div class="col-4">
+        <!-- user info -->
+        <div class="right-item">
+          <%- include('widgets/user-info', { userInfo: userData.userInfo, isMe: userData.isMe }) %>
+          <!-- amIFollowed: userData.amIFollowed,
+                    atCount: userData.atCount -->
+        </div>
+
+      </div> 
+    </div>
+  </div>
+
+  <%- include('layout/footer')%>

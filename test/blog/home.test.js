@@ -3,15 +3,15 @@
  */
 
 const server = require('../server')
-const { registerAndLogin } = require('../testHelper')
-const { Blog } = require('../../src/db/model/index')
+const { registerAndLogin, destroyAll } = require('../testHelper')
+
 
 let BLOG_ID = ''
 let COOKIE = ''
 
 describe('Home page', () => {
   beforeEach(async () => {
-    await Blog.destroy({ where: {} })
+    await destroyAll()
     COOKIE = await registerAndLogin()
   })
 

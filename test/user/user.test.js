@@ -5,13 +5,14 @@
 
 const server = require('../server')
 const { register, login, registerAndLogin } = require('../testHelper')
-const { User } = require('../../src/db/model/index')
+const { User, Blog } = require('../../src/db/model/index')
 const { testUser } = require('../testUserInfo')
 
 
 describe('Register', () => {
   let res
   beforeEach(async () => {
+    await Blog.destroy({ where: {} })
     await User.destroy({ where: {} })
     res = await register(testUser)
   })
@@ -47,6 +48,7 @@ describe('Register', () => {
 
 describe('Login', () => {
   beforeEach(async () => {
+    await Blog.destroy({ where: {} })
     await User.destroy({ where: {} })
     res = await register(testUser)
   })
@@ -61,6 +63,7 @@ describe('Can change user setting after loggin in', () => {
   let COOKIE = ''
 
   beforeEach(async () => {
+    await Blog.destroy({ where: {} })
     await User.destroy({ where: {} })
     COOKIE = await registerAndLogin()
   })

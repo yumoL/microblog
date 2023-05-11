@@ -4,7 +4,8 @@
 
 const server = require('./server')
 const { testUser } = require('./testUserInfo')
-
+const { Blog, User } = require('../src/db/model/index')
+ 
 
 async function register(user) {
   const res = await server
@@ -30,8 +31,32 @@ async function registerAndLogin() {
   return COOKIE
 }
 
+async function addBlogs() {
+  const blogList = [
+    {
+      content: 'aa',
+      image: '/img1.jpg'
+    },
+    {
+      content: 'bb'
+    }
+  ]
+  blogList.forEach(async blog => 
+    await server
+    .post('/api/blog/create')
+    .send(blog)
+    )
+}
+
+async function destroyAll() {
+  await Blog.destroy({ where: {} })
+  await User.destroy({ where: {} })
+}
+
 module.exports = {
   register,
   login,
-  registerAndLogin
+  registerAndLogin,
+  addBlogs,
+  destroyAll
 }

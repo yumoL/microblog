@@ -3,7 +3,7 @@
  */
 const xss = require('xss')
 const { getBlogListByUser } = require('../services/blog')
-const { SuccessModel, ErrorModel } = require('../model/ResModel')
+const { SuccessModel } = require('../model/ResModel')
 const { PAGE_SIZE } = require('../config/constant')
 
 /**

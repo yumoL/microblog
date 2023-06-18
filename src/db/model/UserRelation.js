@@ -9,7 +9,7 @@ const UserRelation = seq.define('userRelation', {
   followerId: {
     type: INTEGER,
     allowNull: false,
-    comment: "the person followed by the user"
+    comment: 'the person followed by the user'
   }
 })
 

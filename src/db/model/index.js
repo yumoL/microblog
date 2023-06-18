@@ -11,7 +11,7 @@ Blog.belongsTo(User, {
 })
 
 UserRelation.belongsTo(User, {
-  foreignKey: 'followerId'
+  foreignKey: 'followeeId'
 })
 
 User.hasMany(UserRelation, {

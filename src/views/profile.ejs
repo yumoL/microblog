@@ -43,6 +43,12 @@
           userList: userData.fansData.list
         })%>
 
+        <!-- followees -->
+        <%- include('widgets/followees', {
+          count: userData.followeesData.count,
+          userList: userData.followeesData.list
+        })%>
+
       </div> 
     </div>
   </div>

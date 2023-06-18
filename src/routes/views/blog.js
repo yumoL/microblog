@@ -7,7 +7,8 @@ const { loginRedirect } = require('../../middlewares/loginChecks')
 const { getProfileBlogList } = require('../../controller/blog-profile')
 const { getSquareBlogList } = require('../../controller/blog-square')
 const { isExist } = require('../../controller/user')
-const { getFans } = require('../../controller/user-relation')
+const { getFans, getFollowees } = require('../../controller/user-relation')
+const { getFolloweesByUser } = require('../../services/user-relation')
 
 // home page
 router.get('/', loginRedirect, async (ctx, next) => {
@@ -41,12 +42,16 @@ router.get('/profile/:userName', loginRedirect, async (ctx, next) => {
 
   // get fans
   const fansResult = await getFans(curUserInfo.id)
-  const { count: fansCount, fansList  } = fansResult.data
+  const { count: fansCount, fansList } = fansResult.data
 
   // check if this user is followed by the logged-in user
   const amIFollowed = fansList.some(item => {
     return item.userName === myUserName
   })
+
+  // get followees
+  const followeesResult = await getFollowees(curUserInfo.id)
+  const { count: followeesCount, followeesList } = followeesResult.data
 
   await ctx.render('profile', {
     blogData: {
@@ -63,12 +68,16 @@ router.get('/profile/:userName', loginRedirect, async (ctx, next) => {
         count: fansCount,
         list: fansList,
       },
+      followeesData: {
+        count: followeesCount,
+        list: followeesList
+      },
       amIFollowed
     }
   })
 })
 
-router.get('/square', loginRedirect, async(ctx, next) => {
+router.get('/square', loginRedirect, async (ctx, next) => {
   const result = await getSquareBlogList(0)
   const { isEmpty, blogList, pageSize, pageIndex, count } = result.data
   await ctx.render('square', {

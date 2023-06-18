@@ -6,7 +6,7 @@ const { User, UserRelation } = require('../db/model/index')
 const { formatUser } = require('./_format.js')
 
 /**
- * get users who are following the person with followerId
+ * get users who are following the person with followeeId
  * @param {number} followeeId user id of the person who is followed
  */
 async function getUsersByFollowee(followeeId) {
@@ -31,7 +31,37 @@ async function getUsersByFollowee(followeeId) {
     count: result.count,
     userList
   }
+}
 
+/**
+ * get users the userId follows
+ * @param {number} userId 
+ */
+async function getFolloweesByUser(userId) {
+  const result = await UserRelation.findAndCountAll({
+    order: [
+      ['id', 'desc']
+    ],
+    include: [
+      {
+        model: User,
+        attributes: ['id', 'userName', 'nickName', 'picture']
+      }
+    ],
+    where: {
+      userId
+    }
+  })
+  let userList = result.rows.map(row => row.dataValues)
+  userList = userList.map(item => {
+    let user = item.user.dataValues
+    user = formatUser(user)
+    return user
+  })
+  return {
+    count: result.count,
+    userList
+  }
 }
 
 /**
@@ -65,6 +95,7 @@ async function deleteFollowingRelation(userId, followeeId) {
 
 module.exports = {
   getUsersByFollowee,
+  getFolloweesByUser,
   addFollowingRelation,
   deleteFollowingRelation
 }

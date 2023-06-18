@@ -28,7 +28,11 @@
       <div class="col-4">
         <!-- user info -->
         <div class="right-item">
-          <%- include('widgets/user-info', { userInfo: userData.userInfo, isMe: userData.isMe }) %>
+          <%- include('widgets/user-info', 
+          { userInfo: userData.userInfo, 
+            isMe: userData.isMe,
+            amIFollowed: userData.amIFollowed
+          }) %>
           <!-- amIFollowed: userData.amIFollowed,
                     atCount: userData.atCount -->
         </div>

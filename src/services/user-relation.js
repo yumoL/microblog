@@ -34,6 +34,37 @@ async function getUsersByFollowee(followeeId) {
 
 }
 
+/**
+ * Add a following relation
+ * @param {number} userId 
+ * @param {number} followeeId user who is followed by userId
+ */
+async function addFollowingRelation(userId, followeeId) {
+  const result = await UserRelation.create({
+    userId,
+    followeeId
+  })
+  return result.dataValues
+}
+
+/**
+ * Delete a following relation
+ * @param {number} userId 
+ * @param {number} followeeId user that userId wants to unfollow
+ */
+async function deleteFollowingRelation(userId, followeeId) {
+  const result = await UserRelation.destroy({
+    where: {
+      userId,
+      followeeId
+    }
+
+  })
+  return result
+}
+
 module.exports = {
-  getUsersByFollowee
+  getUsersByFollowee,
+  addFollowingRelation,
+  deleteFollowingRelation
 }

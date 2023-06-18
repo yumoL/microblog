@@ -2,8 +2,14 @@
  * @description user relation controller
  */
 
-const { getUsersByFollowee } = require('../services/user-relation')
-const { SuccessModel } = require('../model/ResModel')
+const { getUsersByFollowee,
+  addFollowingRelation,
+  deleteFollowingRelation
+} = require('../services/user-relation')
+const { SuccessModel, ErrorModel } = require('../model/ResModel')
+const { addFollowingFailInfo,
+  deleteFollowingFailInfo
+} = require('../model/ErrorInfo')
 
 /**
  * get followers of the user with the given userId
@@ -17,6 +23,36 @@ async function getFans(userId) {
   })
 }
 
+/**
+ * follow a user
+ * @param {number} myUserId user who has logged in
+ * @param {number} curUserId user the logged-in user wants to follow
+ */
+async function follow(myUserId, curUserId) {
+  try {
+    await addFollowingRelation(myUserId, curUserId)
+    return new SuccessModel()
+  } catch (ex) {
+    return new ErrorModel(addFollowingFailInfo)
+  }
+}
+
+/**
+ * Unfollow a user
+ * @param {number} myUserId user who has logged in
+ * @param {number} curUserId user the logged-in user wants to unfollow
+ */
+async function unFollow(myUserId, curUserId) {
+  const result = await deleteFollowingRelation(myUserId, curUserId)
+  if (result) {
+    return new SuccessModel()
+  }
+  return new ErrorModel(deleteFollowingFailInfo)
+
+}
+
 module.exports = {
-  getFans
+  getFans,
+  follow,
+  unFollow
 }

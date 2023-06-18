@@ -54,12 +54,12 @@ module.exports = {
   },
 
 
-  addFollowerFailInfo: {
+  addFollowingFailInfo: {
     errno: 10011,
     message: 'Failed to follow the user'
   },
 
-  deleteFollowerFailInfo: {
+  deleteFollowingFailInfo: {
     errno: 10012,
     message: 'Failed to cancel the following'
   },

@@ -43,6 +43,11 @@ router.get('/profile/:userName', loginRedirect, async (ctx, next) => {
   const fansResult = await getFans(curUserInfo.id)
   const { count: fansCount, fansList  } = fansResult.data
 
+  // check if this user is followed by the logged-in user
+  const amIFollowed = fansList.some(item => {
+    return item.userName === myUserName
+  })
+
   await ctx.render('profile', {
     blogData: {
       isEmpty,
@@ -56,8 +61,9 @@ router.get('/profile/:userName', loginRedirect, async (ctx, next) => {
       isMe,
       fansData: {
         count: fansCount,
-        list: fansList
-      }
+        list: fansList,
+      },
+      amIFollowed
     }
   })
 })

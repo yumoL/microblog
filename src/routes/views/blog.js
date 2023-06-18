@@ -7,6 +7,7 @@ const { loginRedirect } = require('../../middlewares/loginChecks')
 const { getProfileBlogList } = require('../../controller/blog-profile')
 const { getSquareBlogList } = require('../../controller/blog-square')
 const { isExist } = require('../../controller/user')
+const { getFans } = require('../../controller/user-relation')
 
 // home page
 router.get('/', loginRedirect, async (ctx, next) => {
@@ -37,6 +38,11 @@ router.get('/profile/:userName', loginRedirect, async (ctx, next) => {
   // get the first page of the blog list
   const result = await getProfileBlogList(curUserName, 0)
   const { isEmpty, blogList, pageSize, pageIndex, count } = result.data
+
+  // get fans
+  const fansResult = await getFans(curUserInfo.id)
+  const { count: fansCount, fansList  } = fansResult.data
+
   await ctx.render('profile', {
     blogData: {
       isEmpty,
@@ -47,7 +53,11 @@ router.get('/profile/:userName', loginRedirect, async (ctx, next) => {
     },
     userData: {
       userInfo: curUserInfo,
-      isMe
+      isMe,
+      fansData: {
+        count: fansCount,
+        list: fansList
+      }
     }
   })
 })

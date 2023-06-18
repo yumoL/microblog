@@ -33,6 +33,12 @@
                     atCount: userData.atCount -->
         </div>
 
+        <!-- fans -->
+        <%- include('widgets/fans', {
+          count: userData.fansData.count,
+          userList: userData.fansData.list
+        })%>
+
       </div> 
     </div>
   </div>

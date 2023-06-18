@@ -6,7 +6,7 @@ const UserRelation = seq.define('userRelation', {
     type: INTEGER,
     allowNull: false
   },
-  followerId: {
+  followeeId: {
     type: INTEGER,
     allowNull: false,
     comment: 'the person followed by the user'

@@ -24,9 +24,15 @@ async function login(userName, password) {
   return res
 }
 
-async function registerAndLogin() {
+async function registerAndLogin(userName, password) {
   await register(testUser)
-  const res = await login(testUser.userName, testUser.password)
+  let res
+  if (!userName && !password) {
+    res = await login(testUser.userName, testUser.password)
+  } else {
+    res = await login(userName, password)
+  }
+  
   const COOKIE = res.headers['set-cookie'].join(";")
   return COOKIE
 }
@@ -48,6 +54,15 @@ async function addBlogs() {
     )
 }
 
+async function getUserIdByName(userName) {
+  const res = await User.findOne({
+    where: {
+      userName
+    }
+  })
+  return res.dataValues.id
+}
+
 async function destroyAll() {
   await Blog.destroy({ where: {} })
   await User.destroy({ where: {} })
@@ -58,5 +73,6 @@ module.exports = {
   login,
   registerAndLogin,
   addBlogs,
-  destroyAll
+  destroyAll,
+  getUserIdByName
 }

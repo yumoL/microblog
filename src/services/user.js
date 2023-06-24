@@ -4,6 +4,7 @@
 
 const { User } = require('../db/model/index')
 const { formatUser } = require('./_format')
+const { addFollowingRelation } = require('./user-relation')
 
 /**
  * get user information
@@ -38,12 +39,17 @@ async function getUserInfo(userName, password) {
  * @param {string} nickName
  */
 async function createUser({ userName, password, gender = 3, nickName }) {
-  const result = User.create({
+  const result = await User.create({
     userName,
     password,
     gender,
     nickName: nickName ? nickName : userName
   })
+  const data = result.dataValues
+
+  // follow myself so that it's easier to get my blogs and blgs of my followees
+  await addFollowingRelation(data.id, data.id)
+
   return result.dataValues
 }
 

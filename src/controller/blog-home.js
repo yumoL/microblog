@@ -2,12 +2,13 @@
  * @description home page controller
  */
 const xss = require('xss')
-const { createBlog } = require('../services/blog')
+const { createBlog, getFolloweeBlogList } = require('../services/blog')
 const { SuccessModel, ErrorModel } = require('../model/ResModel')
 const { 
   createBlogFailInfo
 }
   = require('../model/ErrorInfo')
+const { PAGE_SIZE } = require('../config/constant')
 
 /**
  * create a blog
@@ -28,6 +29,24 @@ async function create({ userId, content, image }) {
   }
 }
 
+/**
+ * Get blog list (mine and my followee's) for home page
+ * @param {number} userId 
+ * @param {number} pageIndex 
+ */
+async function getHomeBlogList(userId, pageIndex = 0) {
+  const result = await getFolloweeBlogList({ userId, pageIndex, pageSize: PAGE_SIZE})
+  const { count, blogList } = result
+  return new SuccessModel({
+    isEmpty: blogList.length === 0,
+    blogList,
+    pageSize: PAGE_SIZE,
+    pageIndex,
+    count
+  })
+}
+
 module.exports = {
-  create
+  create,
+  getHomeBlogList
 }

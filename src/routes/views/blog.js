@@ -4,15 +4,45 @@
 
 const router = require('koa-router')()
 const { loginRedirect } = require('../../middlewares/loginChecks')
+const { getHomeBlogList } = require('../../controller/blog-home')
 const { getProfileBlogList } = require('../../controller/blog-profile')
 const { getSquareBlogList } = require('../../controller/blog-square')
 const { isExist } = require('../../controller/user')
 const { getFans, getFollowees } = require('../../controller/user-relation')
-const { getFolloweesByUser } = require('../../services/user-relation')
+
 
 // home page
 router.get('/', loginRedirect, async (ctx, next) => {
-  await ctx.render('index', {})
+  const myUserInfo = ctx.session.userInfo
+  const userId = myUserInfo.id
+
+  // get blog list
+  const result = await getHomeBlogList(userId)
+  const { isEmpty, blogList, pageSize, pageIndex, count } = result.data
+
+
+  // get fans
+  const fansResult = await getFans(userId)
+  const { count: fansCount, fansList } = fansResult.data
+
+  // get followees
+  const followeesResult = await getFollowees(userId)
+  const { count: followeesCount, followeesList } = followeesResult.data
+
+  await ctx.render('index', {
+    blogData: { isEmpty, blogList, pageSize, pageIndex, count },
+    userData: {
+      userInfo: myUserInfo,
+      fansData: {
+        count: fansCount,
+        list: fansList
+      },
+      followeesData: {
+        count: followeesCount,
+        list: followeesList
+      }
+    }
+  })
 })
 
 // profile page

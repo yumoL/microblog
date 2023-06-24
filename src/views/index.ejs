@@ -1,18 +1,47 @@
-<%- include('layout/header', { title: 'Weibo - Home page' , isNav: true, list: true, isInputBlog: true })%>
+<%- include('layout/header', { title: 'Weibo - Home' , isNav: true, list: true, isInputBlog: true })%>
 
   <div class="container margin-top-20">
     <div class="row">
-      <!-- left -->
+      <!-- left-->
       <div class="col-8">
-        <!-- blog input area -->
+        <!-- input field -->
         <%- include('widgets/input')%>
 
-      </div> 
+          <!-- blog list -->
+          <% if (blogData.isEmpty) { %>
+            <div>
+              <center>No blog yet</center>
+            </div>
+            <% } else { %>
+              <!-- blog list -->
+              <div id="container-weibo-list" class="weibo-list">
+                <%- include('widgets/blog-list', { blogList: blogData.blogList, canReply: true })%>
+              </div>
+              <!-- load more -->
+              <% if (blogData.count> blogData.blogList.length) { %>
+                <%- include('widgets/load-more', { pageSize: blogData.pageSize, pageIndex: blogData.pageIndex, count:
+                  blogData.count, containerSelector: '#container-weibo-list' , api: '/api/blog/loadMore' , })%>
+                  <% } %>
+                    <% } %>
+
+      </div>
 
       <!-- right -->
       <div class="col-4">
-        todo: right side
-      </div> 
+        <!-- personal info -->
+        <div class="right-item">
+          <%- include('widgets/user-info', { userInfo: userData.userInfo, isMe: true, amIFollowed: false, 
+          // atCount: userData.atCount 
+        });%>
+        </div>
+
+        <!-- fans -->
+        <%- include('widgets/fans', { count: userData.fansData.count, userList: userData.fansData.list })%>
+
+          <!-- followees -->
+          <%- include('widgets/followees', { count: userData.followeesData.count, userList: userData.followeesData.list
+            })%>
+      </div>
     </div>
   </div>
 

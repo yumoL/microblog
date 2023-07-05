@@ -16,6 +16,7 @@ const userValidate = require('../../validator/user')
 const { genValidator } = require('../../middlewares/validator')
 const { isTest } = require('../../utils/env')
 const { loginCheck } = require('../../middlewares/loginChecks')
+const { getFollowees } = require('../../controller/user-relation')
 
 router.prefix('/api/user')
 
@@ -57,5 +58,14 @@ router.patch('/changePassword', loginCheck, genValidator(userValidate), async (c
 
 router.post('/logout', loginCheck, async(ctx, next) => {
   ctx.body = await logout(ctx)
+})
+
+// get at (i.e., followee) list
+router.get('/getAtList', loginCheck, async(ctx, next) => {
+  const { id: userId } = ctx.session.userInfo
+  const result = await getFollowees(userId)
+  const { followeesList } = result.data
+  const arr = followeesList.map(user => `${user.nickName}-${user.userName}`)
+  ctx.body = arr
 })
 module.exports = router

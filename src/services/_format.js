@@ -47,10 +47,29 @@ function _formatDBTime(obj) {
 function formatBlog(list) {
   if (list == null) return 
   if (list instanceof Array) {
-    return list.map(_formatDBTime)
+    return list.map(_formatDBTime).map(_formatContent)
   }
+  let result = list
+  result = _formatDBTime(list)
+  result = _formatContent(result)
+  return result
+}
 
-  return _formatDBTime(list)
+/**
+ * format blog content
+ * @param {*} obj blog obj
+ */
+function _formatContent(obj) {
+  obj.formattedContent = obj.content
+  // convert "hello, @nickName-userName" to "hello, <a href="/profile/userName">@nickName</a>
+  reg = /@(.+?)-(\w+?)\b/g
+  obj.formattedContent = obj.formattedContent.replace(
+    reg,
+    (matchStr, nickName, userName) => {
+      return `<a href="/profile/${userName}">@${nickName}</a>`
+    }
+  )
+  return obj
 }
 
 module.exports = {

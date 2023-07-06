@@ -32,7 +32,7 @@
 
     <script>
       $(function () {
-       
+        // set the cursor position within a text input or textarea element.
         function setCursor(el, st, end) {
           if (el.setSelectionRange) {
             el.focus()
@@ -46,7 +46,7 @@
           }
         }
 
-      
+        // reply
         var $textContent = $('#text-content')
         $('.blog-list-reply').click(function (e) {
           e.preventDefault()
@@ -56,7 +56,9 @@
           var userName = $target.attr('data-userName')
           var nickName = $target.attr('data-nickName')
 
-          $textContent.val(' // @' + nickName + ' - ' + userName + ' : ' + content)
+          $textContent.val(' // @' + nickName + '-' + userName + ' : ' + content)
+          
+          // set cursor to the beginning (before //) when reply)
           setCursor($textContent[0], 0, 0)
         })
       })

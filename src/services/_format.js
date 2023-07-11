@@ -62,7 +62,7 @@ function formatBlog(list) {
 function _formatContent(obj) {
   obj.formattedContent = obj.content
   // convert "hello, @nickName-userName" to "hello, <a href="/profile/userName">@nickName</a>
-  reg = /@(.+?)-(\w+?)\b/g
+  const reg = /@(.+?)-(\w+?)\b/g
   obj.formattedContent = obj.formattedContent.replace(
     reg,
     (matchStr, nickName, userName) => {

@@ -9,7 +9,7 @@ const { getProfileBlogList } = require('../../controller/blog-profile')
 const { getSquareBlogList } = require('../../controller/blog-square')
 const { isExist } = require('../../controller/user')
 const { getFans, getFollowees } = require('../../controller/user-relation')
-
+const { getAtMeCount } = require('../../controller/blog-at')
 
 // home page
 router.get('/', loginRedirect, async (ctx, next) => {
@@ -29,6 +29,10 @@ router.get('/', loginRedirect, async (ctx, next) => {
   const followeesResult = await getFollowees(userId)
   const { count: followeesCount, followeesList } = followeesResult.data
 
+  // get @ count
+  const atCountResult = await getAtMeCount(userId)
+  const { count: atCount } = atCountResult.data
+
   await ctx.render('index', {
     blogData: { isEmpty, blogList, pageSize, pageIndex, count },
     userData: {
@@ -40,7 +44,8 @@ router.get('/', loginRedirect, async (ctx, next) => {
       followeesData: {
         count: followeesCount,
         list: followeesList
-      }
+      },
+      atCount
     }
   })
 })
@@ -83,6 +88,10 @@ router.get('/profile/:userName', loginRedirect, async (ctx, next) => {
   const followeesResult = await getFollowees(curUserInfo.id)
   const { count: followeesCount, followeesList } = followeesResult.data
 
+  // get @ count
+  const atCountResult = await getAtMeCount(myUserInfo.id)
+  const { count: atCount } = atCountResult.data
+
   await ctx.render('profile', {
     blogData: {
       isEmpty,
@@ -102,7 +111,8 @@ router.get('/profile/:userName', loginRedirect, async (ctx, next) => {
         count: followeesCount,
         list: followeesList
       },
-      amIFollowed
+      amIFollowed,
+      atCount
     }
   })
 })

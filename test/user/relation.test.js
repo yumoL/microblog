@@ -42,7 +42,7 @@ describe('Relation', () => {
       .post('/api/profile/follow')
       .send({ userId: userId2 })
       .set('cookie', COOKIE)
-
+      
     const result = await getFans(userId2)
     const { count, fansList } = result.data
     const hasUser1Name = fansList.some(fanInfo => {
@@ -65,6 +65,20 @@ describe('Relation', () => {
     })
     expect(count > 0).toBe(true)
     expect(hasUser2Name).toBe(true)
+  })
+
+  test('The @ list of user1 should have user2', async() => {
+    await server
+      .post('/api/profile/follow')
+      .send({ userId: userId2 })
+      .set('cookie', COOKIE)
+
+    const res = await server
+      .get('/api/user/getAtList')
+      .set('cookie', COOKIE)
+    const atList = res.body
+    const hasTestUser2 = atList.some(item => `${testUser.nickName}-${testUser.userName}`)
+    expect(hasTestUser2).toBe(true)
   })
 
   test('User1 can unfollow user2', async () => {

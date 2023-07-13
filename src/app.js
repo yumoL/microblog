@@ -21,6 +21,7 @@ const blogViewRouter = require('./routes/views/blog')
 const profileApiRouter = require('./routes/apis/blog-profile')
 const squareApiRouter = require('./routes/apis/blog-square')
 const homeApiRouter = require('./routes/apis/blog-home')
+const atApiRouter = require('./routes/apis/blog-at')
 const errorViewRouter = require('./routes/views/error')
 
 // error handler
@@ -79,6 +80,7 @@ app.use(blogViewRouter.routes(), blogViewRouter.allowedMethods())
 app.use(profileApiRouter.routes(), profileApiRouter.allowedMethods())
 app.use(squareApiRouter.routes(), squareApiRouter.allowedMethods())
 app.use(homeApiRouter.routes(), homeApiRouter.allowedMethods())
+app.use(atApiRouter.routes(), atApiRouter.allowedMethods())
 app.use(errorViewRouter.routes(), errorViewRouter.allowedMethods()) //error routes need to be the final one
 
 // error-handling

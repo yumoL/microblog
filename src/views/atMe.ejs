@@ -1,0 +1,34 @@
+<%- include('layout/header', { title: 'Weibo - @me' , isNav: true, list: true, isInputBlog: true })%>
+
+  <div class="container margin-top-20">
+    <div class="row">
+      <!-- left -->
+      <div class="col-8">
+        <h4 class="padding-bottom-10">
+          @me (<%= atCount%> unread)
+        </h4>
+
+        <!-- input area -->
+        <%- include('widgets/input')%>
+
+          <% if (blogData.isEmpty) { %>
+            <div>
+              <center>No blogs yet</center>
+            </div>
+            <% } else { %>
+              <!-- blog list -->
+              <div id="container-weibo-list" class="weibo-list">
+                <%- include('widgets/blog-list', { blogList: blogData.blogList, canReply: true })%>
+              </div> 
+              <!-- load more -->
+              <% if (blogData.count > blogData.blogList.length) { %>
+                <%- include('widgets/load-more', { pageSize: blogData.pageSize, pageIndex: blogData.pageIndex, count:
+                  blogData.count, containerSelector: '#container-weibo-list' , api: '/api/atMe/loadMore' , })%>
+                  <% } %> 
+                    <% } %>
+
+      </div>
+    </div>
+  </div>
+
+  <%- include('layout/footer')%>

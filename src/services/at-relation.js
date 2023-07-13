@@ -68,8 +68,38 @@ async function getAtUserBlogList({ userId, pageIndex = 0, pageSize }) {
   }
 }
 
+/**
+ * Update at relation
+ * @param {Object} param0 content to be updated
+ * @param {Object} param1 query constraints
+ */
+async function updateAtRelation(
+  { newIsRead },
+  { userId, isRead }
+) {
+  const updateData = {}
+  if (newIsRead) {
+    updateData.isRead = newIsRead
+  }
+
+  const whereConstraints = {}
+  if (userId) {
+    whereConstraints.userId = userId
+  }
+  if (isRead) {
+    whereConstraints.isRead = isRead
+  }
+
+  const result = await AtRelation.update(updateData, {
+    where: whereConstraints
+  })
+
+  return result[0] > 0
+}
+
 module.exports = {
   createAtRelation,
   getAtRelationCount,
-  getAtUserBlogList
+  getAtUserBlogList,
+  updateAtRelation
 }

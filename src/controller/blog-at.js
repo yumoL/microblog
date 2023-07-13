@@ -2,7 +2,11 @@
  * @description Blog @ relations controller
  */
 
-const { getAtRelationCount, getAtUserBlogList } = require('../services/at-relation')
+const { 
+  getAtRelationCount, 
+  getAtUserBlogList,
+  updateAtRelation 
+} = require('../services/at-relation')
 const { SuccessModel } = require('../model/ResModel')
 const { PAGE_SIZE } = require('../config/constant')
 
@@ -28,7 +32,7 @@ async function getAtMeBlogList(userId, pageIndex = 0) {
     pageIndex, 
     pageSize: PAGE_SIZE 
   })
-  
+
   const { count, blogList } = result
 
   return new SuccessModel({
@@ -40,7 +44,23 @@ async function getAtMeBlogList(userId, pageIndex = 0) {
   })
 }
 
+/**
+ * mark blogs as read
+ * @param {number} userId 
+ */
+async function markAsRead(userId) {
+  try {
+    await updateAtRelation(
+      { newIsRead: true},
+      { userId, isRead: false}
+    )
+  } catch (ex) {
+    console.error(ex)
+  }
+}
+
 module.exports = {
   getAtMeCount,
-  getAtMeBlogList
+  getAtMeBlogList,
+  markAsRead
 }

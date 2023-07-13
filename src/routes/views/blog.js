@@ -9,7 +9,7 @@ const { getProfileBlogList } = require('../../controller/blog-profile')
 const { getSquareBlogList } = require('../../controller/blog-square')
 const { isExist } = require('../../controller/user')
 const { getFans, getFollowees } = require('../../controller/user-relation')
-const { getAtMeCount, getAtMeBlogList } = require('../../controller/blog-at')
+const { getAtMeCount, getAtMeBlogList, markAsRead } = require('../../controller/blog-at')
 
 // home page
 router.get('/', loginRedirect, async (ctx, next) => {
@@ -156,7 +156,7 @@ router.get('/at-me', loginRedirect, async (ctx, next) => {
 
   // mark as read
   if (atCount > 0) {
-
+    await markAsRead(userId)
   }
 })
 

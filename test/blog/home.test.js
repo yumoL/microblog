@@ -3,7 +3,7 @@
  */
 
 const server = require('../server')
-const { registerAndLogin, destroyAll, addBlogs } = require('../testHelper')
+const { registerAndLogin, destroyAll } = require('../testHelper')
 
 
 let BLOG_ID = ''

@@ -5,7 +5,6 @@
 
 const server = require('../server')
 const { addBlogs, destroyAll, registerAndLogin } = require('../testHelper')
-const { testUser } = require('../testUserInfo')
 
 describe('Square', () => {
   let COOKIE = ''

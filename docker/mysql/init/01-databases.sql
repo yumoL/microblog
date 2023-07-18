@@ -1,2 +1,3 @@
-CREATE DATABASE IF NOT EXISTS `koa2_weibo_db`;
+CREATE DATABASE IF NOT EXISTS `koa2_weibo_db`; 
+CREATE DATABASE IF NOT EXISTS `koa2_weibo_prd_db`;
 CREATE DATABASE IF NOT EXISTS `koa2_weibo_test_db`;

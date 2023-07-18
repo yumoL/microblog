@@ -9,6 +9,8 @@ const logger = require('koa-logger')
 const session = require('koa-generic-session')
 const redisStore = require('koa-redis')
 const koaStatic = require('koa-static')
+const cors = require('@koa/cors')
+const Redis = require('ioredis')
 
 const { REDIS_CONF } = require('./config/db')
 const { SESSION_SECRET_KEY } = require('./config/secretKeys')
@@ -35,6 +37,7 @@ if (!isProd) {
 onerror(app, onErrorConf)
 
 // middlewares
+app.use(cors())
 app.use(bodyparser({
   enableTypes:['json', 'form', 'text']
 }))
@@ -59,7 +62,10 @@ app.use(session({
   },
   //ttl of redis key is defaulted to maxAge
   store: redisStore({
-    all: `${REDIS_CONF.host}:${REDIS_CONF.port}`
+    client: new Redis({
+      host: REDIS_CONF.host,
+      port: REDIS_CONF.port
+    })
   })
 }))
 

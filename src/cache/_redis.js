@@ -5,11 +5,19 @@
 const redis = require('redis')
 const { REDIS_CONF } = require('../config/db')
 
-const redisClient = redis.createClient(REDIS_CONF.port, REDIS_CONF.host)
+// const redisClient = redis.createClient(REDIS_CONF.port, REDIS_CONF.host)
+const redisClient = redis.createClient({
+  url: `redis://${REDIS_CONF.host}:${REDIS_CONF.port}`
+})
 !(async function () {
   await redisClient.connect()
-    .then(() => console.log('Connected to redis'))
-    .catch(console.error)
+  if (redisClient.isReady) {
+    console.log('Connected to redis')
+  } else {
+    console.error(`Failed to connect to redis. Host: ${REDIS_CONF.host}, post: ${REDIS_CONF.port}`)
+  }
+  // .then(() => console.log('Connected to redis'))
+  // .catch(console.error(`Failed to connect to redis. Host: ${REDIS_CONF.host}, post: ${REDIS_CONF.port}`))
 })()
 
 /**
